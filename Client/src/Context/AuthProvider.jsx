@@ -14,7 +14,10 @@ const AuthProvider = ({Children}) => {
         });
         return ()=>{return unSubscribe()};
     },[])
-    const passing = {};
+    const passing = {
+        loading,
+        user
+    };
     return (
         <AuthContext.Provider value={passing}>
             {Children}
