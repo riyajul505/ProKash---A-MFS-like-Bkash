@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
   const {
@@ -8,6 +9,7 @@ const Registration = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
   const axiosPublic = useAxiosPublic();
   const onSubmit = (data) => {
     const userInfo = {
@@ -23,7 +25,8 @@ const Registration = () => {
     .then((res) => {
       if (res.data.insertedId) {
         // generate token
-        
+        axiosPublic.post('/create-token', {_id: res.data.insertedId})
+        .then(() => {navigate('/home')})
         // show confirmation alert
         Swal.fire({
           title: "Registration Complete",

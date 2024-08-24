@@ -9,7 +9,8 @@ const AuthProvider = ({children}) => {
     
     const passing = {
         loading,
-        user
+        user,
+        setUser
     };
     return (
         <AuthContext.Provider value={passing}>

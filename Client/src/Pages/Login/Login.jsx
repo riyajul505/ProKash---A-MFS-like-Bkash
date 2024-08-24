@@ -8,11 +8,37 @@ import {
 } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { TbBrandProducthunt } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
+  const axiosPublic = useAxiosPublic();
+  const navigate = useNavigate();
   const onSubmit = (data) => {
-    console.log(data);
+    axiosPublic
+      .get(`/login?number=${data.number}&pin=${data.pin}`)
+      .then((res) => {
+        if (res.data.message) {
+          Swal.fire({
+            title: `${res.data.message}`,
+            position: "top-right",
+            icon: "warning",
+            showConfirmButton: false,
+          });
+        } else {
+          axiosPublic.post("/create-token", { _id: res.data }).then(() => {
+            navigate("/home");
+            Swal.fire({
+              title: `Logged In`,
+              position: "top-right",
+              icon: "success",
+              showConfirmButton: false,
+            });
+          });
+        }
+      });
   };
   return (
     <div>
@@ -33,8 +59,8 @@ const Login = () => {
             Login
           </Typography>
           <Typography className="!text-gray-600 text-[18px] font-normal md:max-w-sm">
-            Enjoy quick and send money, cash-out to your accounts on various numbers with our
-            platforms.
+            Enjoy quick and send money, cash-out to your accounts on various
+            numbers with our platforms.
           </Typography>
         </CardHeader>
         <CardBody className="pt-0">
@@ -95,11 +121,10 @@ const Login = () => {
               variant="small"
               className="text-center mx-auto max-w-[19rem] !font-medium !text-gray-600"
             >
-              Are you new here? {" "}
+              Are you new here?{" "}
               <a href="/registration" className="text-gray-900">
                 Register
               </a>{" "}
-              
             </Typography>
           </form>
         </CardBody>
