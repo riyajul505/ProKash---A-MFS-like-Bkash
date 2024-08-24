@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
-import axios from "axios";
 
 const Registration = () => {
   const {
@@ -20,18 +19,24 @@ const Registration = () => {
       balance: 40,
       role: "user",
     };
-    axios.post("http://localhost:5000/registration", userInfo)
+    axiosPublic.post("/registration", userInfo)
     .then((res) => {
       if (res.data.insertedId) {
+        // generate token
+        
+        // show confirmation alert
         Swal.fire({
           title: "Registration Complete",
           showConfirmButton: false,
           timer: 1300,
         });
-        console.log(data.data.insertedId, "iiiddd");
       } 
       else {
-        console.log(res.data.message, "this is message");
+        Swal.fire({
+          title: `${res.data.message}`,
+          showConfirmButton: false,
+          timer: 1300,
+        })
       }
     });
   };
