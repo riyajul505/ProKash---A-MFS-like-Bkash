@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
@@ -28,10 +28,52 @@ const client = new MongoClient(uri, {
   },
 });
 
+const getId = (req, res, next) => {
+  const token = req?.cookies?.token;
+  if(!token){
+    return res.status(401).send({message: 'no token available'})
+  }
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded)=>{
+    if(error){
+      return res.status(401).send({message: 'token error'})
+    }
+    req._id = decoded;
+    next();
+  })
+}
+
 async function run() {
   try {
     // collection names
     const usersCollection = client.db("Prokash").collection("Users-Collection");
+    // get user data
+    app.get('/user-details', getId, async (req, res)=>{
+      const query = {_id: new ObjectId(req._id)};
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    })
+    // generate-token
+    app.post('/create-token', (req, res)=>{
+      const {_id} = req.body;
+      const token = jwt.sign(_id, process.env.ACCESS_TOKEN_SECRET);
+      res.cookie('token', token,{httpOnly: true}).send({message: 'token created'});
+    })
+    // login
+    app.get('/login', async (req, res)=>{
+      const plainPin = req.query.pin;
+      console.log(req.query.number, req.query.pin);
+      const result = await usersCollection.findOne({mobile_number:req.query.number});
+      // checking pin with encrypted one
+      const checkPin = bcrypt.compareSync(plainPin, result.pin);
+      if(!checkPin && result){
+        return res.send({message: 'Pin does not match'})
+      }
+      if(!checkPin && !result){
+        return res.send({message: 'Number and PIN does not match'})
+      }
+      res.send(JSON.stringify(result._id));
+      
+    })
     // registration
     app.post("/registration", async (req, res) => {
       const userInfo = req.body;
@@ -46,7 +88,6 @@ async function run() {
         userInfo.pin = hashPin;
         // adding user
         const result = await usersCollection.insertOne(userInfo);
-        console.log(result.insertedId);
         res.send(result);
       }
     });
