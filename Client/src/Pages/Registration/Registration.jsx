@@ -57,11 +57,11 @@ const Registration = () => {
                 className="input input-bordered"
                 required
               />
-              <label className="label">
+              {/* <label className="label">
                 <Link to={"/login"} className="label-text-alt link link-hover">
                   Already registred? Login
                 </Link>
-              </label>
+              </label> */}
             </div>
             <div className="form-control mt-6">
               <button className="btn btn-primary">Login</button>

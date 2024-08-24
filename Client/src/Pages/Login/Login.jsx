@@ -33,7 +33,7 @@ const Login = () => {
             Login
           </Typography>
           <Typography className="!text-gray-600 text-[18px] font-normal md:max-w-sm">
-            Enjoy quick and secure access to your accounts on various Web3
+            Enjoy quick and send money, cash-out to your accounts on various numbers with our
             platforms.
           </Typography>
         </CardHeader>
@@ -98,14 +98,11 @@ const Login = () => {
               variant="small"
               className="text-center mx-auto max-w-[19rem] !font-medium !text-gray-600"
             >
-              Upon signing in, you consent to abide by our{" "}
-              <a href="#" className="text-gray-900">
-                Terms of Service
+              Are you new here? {" "}
+              <a href="/registration" className="text-gray-900">
+                Register
               </a>{" "}
-              &{" "}
-              <a href="#" className="text-gray-900">
-                Privacy Policy.
-              </a>
+              
             </Typography>
           </form>
         </CardBody>
