@@ -15,10 +15,10 @@ const Login = () => {
     console.log(data);
   };
   return (
-    <div className="flex justify-center bg-white h-[100vh]">
+    <div>
       <Card
         shadow={false}
-        className="md:px-24 md:py-14 py-8 border border-gray-300 lg:w-1/2 items-center justify-center"
+        className="md:px-24 md:py-14 py-8 border border-gray-300 flex items-center justify-center h-[100vh]"
       >
         <CardHeader shadow={false} floated={false} className="text-center">
           <Typography
@@ -37,7 +37,7 @@ const Login = () => {
             platforms.
           </Typography>
         </CardHeader>
-        <CardBody>
+        <CardBody className="pt-0">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4 md:mt-12"
@@ -56,8 +56,7 @@ const Login = () => {
                 id="number"
                 color="gray"
                 {...register("number", { required: true })}
-                max={11}
-                min={11}
+                maxLength={11}
                 type="number"
                 placeholder="01871111324"
                 className="input input-bordered w-full max-w-xs"
@@ -78,13 +77,11 @@ const Login = () => {
                 color="gray"
                 size="lg"
                 type="number"
-                max={4}
-                min={4}
                 {...register("pin", { required: true })}
                 inputMode="numeric"
                 name="pin"
                 placeholder="1234"
-                className="!w-full placeholder:!opacity-100 focus:!border-t-primary !border-t-blue-gray-200 "
+                className="!w-full placeholder:!opacity-100 focus:!border-t-primary !border-t-blue-gray-200"
                 labelProps={{
                   className: "hidden",
                 }}

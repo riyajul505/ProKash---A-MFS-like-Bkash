@@ -1,9 +1,40 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import axios from "axios";
 
 const Registration = () => {
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => {console.log(data)};
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const axiosPublic = useAxiosPublic();
+  const onSubmit = (data) => {
+    const userInfo = {
+      name: data.name,
+      pin: data.pin,
+      mobile_number: data.number,
+      email: data.email,
+      status: "pending",
+      balance: 40,
+      role: "user",
+    };
+    axios.post("http://localhost:5000/registration", userInfo)
+    .then((res) => {
+      if (res.data.insertedId) {
+        Swal.fire({
+          title: "Registration Complete",
+          showConfirmButton: false,
+          timer: 1300,
+        });
+        console.log(data.data.insertedId, "iiiddd");
+      } 
+      else {
+        console.log(res.data.message, "this is message");
+      }
+    });
+  };
 
   return (
     <div className="hero bg-base-200 min-h-screen">
@@ -20,7 +51,7 @@ const Registration = () => {
               <input
                 type="text"
                 placeholder="your name"
-                {...register("name")} 
+                {...register("name")}
                 className="input input-bordered"
                 required
               />
@@ -31,6 +62,7 @@ const Registration = () => {
               </label>
               <input
                 type="email"
+                {...register("email")}
                 placeholder="email"
                 className="input input-bordered"
                 required
@@ -42,10 +74,20 @@ const Registration = () => {
               </label>
               <input
                 type="number"
+                {...register("number", { maxLength: 11, minLength: 11 })}
                 placeholder="Number"
                 className="input input-bordered"
                 required
               />
+              {errors.number ? (
+                <div className="label">
+                  <span className="label-text-alt text-red-500">
+                    Number must be 11 digit
+                  </span>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <div className="form-control">
               <label className="label">
@@ -53,18 +95,23 @@ const Registration = () => {
               </label>
               <input
                 type="number"
+                {...register("pin", { maxLength: 4, minLength: 4 })}
                 placeholder="PIN"
                 className="input input-bordered"
                 required
               />
-              {/* <label className="label">
-                <Link to={"/login"} className="label-text-alt link link-hover">
-                  Already registred? Login
-                </Link>
-              </label> */}
+              {errors.pin ? (
+                <div className="label">
+                  <span className="label-text-alt text-red-500">
+                    Pin must be 4 digit
+                  </span>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <div className="form-control mt-6">
-              <button className="btn btn-primary">Login</button>
+              <button className="btn btn-primary">Register</button>
             </div>
           </form>
         </div>
