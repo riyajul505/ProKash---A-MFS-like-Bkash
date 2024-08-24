@@ -37,16 +37,18 @@ async function run() {
       const userInfo = req.body;
       const {pin} = userInfo;
       const exist = await usersCollection.findOne({mobile_number: userInfo.mobile_number});
-      console.log(exist);
-      // if(exist){
-      //   res.send({message: 'User already exist'})
-      // }
-      // else {
-      //   const hashPin = bcrypt.hashSync(pin, salt);
-      //   userInfo.pin = hashPin;
-      //   const result = await usersCollection.insertOne(userInfo);
-      //   res.send(result);
-      // }
+      if(exist){
+        res.send({message: 'User already exist'})
+      }
+      else {
+        // hashing pin
+        const hashPin = bcrypt.hashSync(pin, salt);
+        userInfo.pin = hashPin;
+        // adding user
+        const result = await usersCollection.insertOne(userInfo);
+        console.log(result.insertedId);
+        res.send(result);
+      }
     });
 
     console.log(
@@ -54,7 +56,7 @@ async function run() {
     );
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
