@@ -26,7 +26,7 @@ const Registration = () => {
       if (res.data.insertedId) {
         // generate token
         axiosPublic.post('/create-token', {_id: res.data.insertedId})
-        .then(() => {navigate('/home')})
+        .then(() => {navigate('/dashboard')})
         // show confirmation alert
         Swal.fire({
           title: "Registration Complete",

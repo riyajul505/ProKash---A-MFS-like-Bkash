@@ -30,7 +30,7 @@ const Login = () => {
           });
         } else {
           axiosPublic.post("/create-token", { _id: res.data }).then(() => {
-            navigate("/home");
+            navigate("/dashboard");
             Swal.fire({
               title: `Logged In`,
               position: "top-right",
