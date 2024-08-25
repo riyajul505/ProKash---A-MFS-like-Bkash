@@ -58,10 +58,13 @@ async function run() {
       const token = jwt.sign(_id, process.env.ACCESS_TOKEN_SECRET);
       res.cookie('token', token,{httpOnly: true}).send({message: 'token created'});
     })
+    // clear token
+    app.get('/clear-token', (req, res)=>{
+      res.clearCookie('token', {httpOnly: true, maxAge: 0}).send({logout:true})
+    })
     // login
     app.get('/login', async (req, res)=>{
       const plainPin = req.query.pin;
-      console.log(req.query.number, req.query.pin);
       const result = await usersCollection.findOne({mobile_number:req.query.number});
       // checking pin with encrypted one
       const checkPin = bcrypt.compareSync(plainPin, result.pin);
