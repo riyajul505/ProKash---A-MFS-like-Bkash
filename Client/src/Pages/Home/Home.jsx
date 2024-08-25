@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthProvider';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
-import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const axiosSecure = useAxiosSecure();
@@ -11,12 +11,12 @@ const Home = () => {
         axiosSecure.get('/user-details')
         .then(res => {setUser(res.data)})
     },[axiosSecure, setUser])
-    if(!user){
-        return navigate('/login')
-    }
+    // if(!user){
+    //    return navigate('/')
+    // }
     return (
         <div>
-            {user.name}
+            {user && user.name}
         </div>
     );
 };
