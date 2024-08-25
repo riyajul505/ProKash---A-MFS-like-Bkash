@@ -26,6 +26,7 @@ const Login = () => {
             position: "top-right",
             icon: "warning",
             showConfirmButton: false,
+            timer: 1300
           });
         } else {
           axiosPublic.post("/create-token", { _id: res.data }).then(() => {
@@ -35,6 +36,7 @@ const Login = () => {
               position: "top-right",
               icon: "success",
               showConfirmButton: false,
+              timer: 1300,
             });
           });
         }
